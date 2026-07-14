@@ -4,6 +4,8 @@ Acceso a datos.
 Responsabilidad: toda interacción con Supabase debe permanecer en este archivo.
 No colocar llamadas a Supabase directamente en app.py.
 """
+from urllib import response
+
 from supabase import create_client, Client
 from config import SUPABASE_URL, SUPABASE_KEY
 
@@ -33,3 +35,44 @@ def eliminar_libro(libro_id: int):
     """TODO 4: eliminar sólo el libro indicado y devolver el eliminado."""
     # IMPORTANTE: delete() siempre debe combinarse con un filtro.
     raise NotImplementedError("Endpoint pendiente: DELETE /libros/<id>")
+
+def obtener_libro_por_id(libro_id: int):
+    respuesta = (
+        supabase
+        .table("libros")
+        .select("*")
+        .eq("id", libro_id)
+        .execute()
+    )
+    if respuesta.data:
+        return respuesta.data[0]
+    return None
+
+def insertar_libro(libro):
+    response = (
+        supabase
+        .table("libros")
+        .insert(libro)
+        .execute()
+    )
+    return response.data
+
+def actualizar_libro(id, libro):
+    response = (
+    supabase
+    .table("libros")
+    .update(libro)
+    .eq("id", id)
+    .execute()
+    )
+    return response.data
+
+def eliminar_libro(id):
+ response = (
+ supabase
+ .table("libros")
+ .delete()
+ .eq("id", id)
+ .execute()
+ )
+ return response.data
